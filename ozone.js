@@ -46,7 +46,7 @@ var county_ozone;
 /*--------------------------------------------------------------------------------------------
     importing the data for ozone levels
 --------------------------------------------------------------------------------------------*/
-d3.json("test2.json", function(err, co){
+d3.json("ozone.json", function(err, co){
     
     var ozone = [];     
     console.log(co);  
