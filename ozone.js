@@ -73,17 +73,74 @@ d3.json("ozone.json", function(err, co){
         .enter().append("path")
         .attr("class", "county-border")
         .attr("d", path)
-        .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/10); });
-  
-        var texts = svg.selectAll("text")
+        .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/10); })
+        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
+      
+        
+        .on("mouseover", function(d) {
+
+        current_position = d3.mouse(this)
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+       .style("left", current_position[0] + "px")
+        .style("top", current_position[1] +"px")
+        .html("AQI: " + Math.round(getCountyOzone(d.properties.name)))
+        .select("#value");
+
+        //Show the tooltip
+        d3.select("#tooltip").classed("hidden", false);
+
+        })
+        .on("mouseout", function() {
+
+        //Hide the tooltip
+        d3.select("#tooltip").classed("hidden", true);
+
+        });
+        
+        d3.select(".2011").onclick(function(d){
+        
+   //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
+    svg.selectAll(".county")
+        .data(counties.features)
+        .enter().append("path")
+        .attr("class", "county-border")
+        .attr("d", path)
+        .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/100); })
+        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
+      
+        
+        .on("mouseover", function(d) {
+
+        current_position = d3.mouse(this)
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+       .style("left", current_position[0] + "px")
+        .style("top", current_position[1] +"px")
+        .html("AQI: " + Math.round(getCountyOzone(d.properties.name)))
+        .select("#value");
+
+        //Show the tooltip
+        d3.select("#tooltip").classed("hidden", false);
+
+        })
+        .on("mouseout", function() {
+
+        //Hide the tooltip
+        d3.select("#tooltip").classed("hidden", true);
+
+        });    
+        });
+        
+       /*  var texts = svg.selectAll("text")
                .data(counties.features)
                .enter();
-    
+    */
     //displaying the text
-    texts.append("text")
+    /*texts.append("text")
         .text(function(d){
             return d.properties.name;
-        });
+        });*/
     
     
 /***************************************************************************************************
