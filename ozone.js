@@ -73,6 +73,7 @@ d3.json("ozone.json", function(err, co){
         .enter().append("path")
         .attr("class", "county-border")
         .attr("d", path)
+<<<<<<< HEAD
         .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/10); })
         //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
       
@@ -141,6 +142,19 @@ d3.json("ozone.json", function(err, co){
         .text(function(d){
             return d.properties.name;
         });*/
+=======
+        .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/10); });
+  
+        var texts = svg.selectAll("text")
+               .data(counties.features)
+               .enter();
+    
+    //displaying the text
+    texts.append("text")
+        .text(function(d){
+            return d.properties.name;
+        });
+>>>>>>> 57432c89f0fb21f7d151415d0e45bb058c17d832
     
     
 /***************************************************************************************************
