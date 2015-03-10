@@ -5,7 +5,7 @@
 //Taken from previous assignments
 var margin = {top: 20, right: 20, bottom: 20, left: 20};
   width = 1000 - margin.left - margin.right,
-  height = 1200 - margin.top - margin.bottom;
+  height = 700 - margin.top - margin.bottom;
 
 var svg = d3.select("body").append("svg")
   .attr("width", width + margin.left + margin.right)
@@ -15,10 +15,10 @@ var svg = d3.select("body").append("svg")
 
 //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
 var projection = d3.geo.albers()
-.translate([width / 2, height / 2])
-.parallels([34, 40.5])
+.translate([width/1.75, height / 2])
+.parallels([60, 50])
 .rotate([120, 0])
-.scale(3000);
+.scale(3500);
 
 
 //var p=d3.scale.category10();
@@ -46,7 +46,14 @@ var county_ozone;
 /*--------------------------------------------------------------------------------------------
     importing the data for ozone levels
 --------------------------------------------------------------------------------------------*/
-d3.json("ozone.json", function(err, co){
+function map(year){
+    var id = "ozone.json";
+    if(year=="2001"){
+       id = "ozone.json";  
+        console.log("if worked");
+    }
+    
+    d3.json(id, function(err, co){
     
     var ozone = [];     
     console.log(co);  
@@ -97,41 +104,11 @@ d3.json("ozone.json", function(err, co){
         //Hide the tooltip
         d3.select("#tooltip").classed("hidden", true);
 
-        });
-        
-        d3.select(".2011").onclick(function(d){
-        
-   //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
-    svg.selectAll(".county")
-        .data(counties.features)
-        .enter().append("path")
-        .attr("class", "county-border")
-        .attr("d", path)
-        .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/100); })
-        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
-      
-        
-        .on("mouseover", function(d) {
-
-        current_position = d3.mouse(this)
-        //Update the tooltip position and value
-        d3.select("#tooltip")
-       .style("left", current_position[0] + "px")
-        .style("top", current_position[1] +"px")
-        .html("AQI: " + Math.round(getCountyOzone(d.properties.name)))
-        .select("#value");
-
-        //Show the tooltip
-        d3.select("#tooltip").classed("hidden", false);
-
         })
-        .on("mouseout", function() {
-
-        //Hide the tooltip
-        d3.select("#tooltip").classed("hidden", true);
-
-        });    
-        });
+        })   
+    
+})
+   };
         
        /*  var texts = svg.selectAll("text")
                .data(counties.features)
@@ -142,9 +119,8 @@ d3.json("ozone.json", function(err, co){
         .text(function(d){
             return d.properties.name;
         });*/
-
-            
-/***************************************************************************************************
+function init(){
+   /***************************************************************************************************
     Code for legend
     Got the code from homework 3 and modify it
 ****************************************************************************************************/
@@ -154,8 +130,8 @@ draw legend colored rectangles and the circles inside
     
     
     svg.append("rect")
-        .attr("x", width-250)
-        .attr("y", height-190)
+        .attr("x", width-300)
+        .attr("y", height-600)
         .attr("width", 220)
         .attr("height", 180)
         .attr("fill", "lightgrey")
@@ -163,29 +139,29 @@ draw legend colored rectangles and the circles inside
 
     svg.append("circle")
         .attr("r", 13)
-        .attr("cx", width-225)
-        .attr("cy", height-165)
+        .attr("cx", width-275)
+        .attr("cy", height-575)
        // .style("fill", "green");
         .style("fill", "white");
     
     svg.append("circle")
         .attr("r", 13)
-        .attr("cx", width-225)
-        .attr("cy", height-130)
+        .attr("cx", width-275)
+        .attr("cy", height-540)
      //   .style("fill", "yellow");
         .style("fill", "#fee0d2");
     
     svg.append("circle")
         .attr("r", 13)
-        .attr("cx", width-225)
-        .attr("cy", height-95)
+        .attr("cx", width-275)
+        .attr("cy", height-505)
       //  .style("fill", "orange");
         .style("fill", "#fc9272");
 
     svg.append("circle")
         .attr("r", 13)
-        .attr("cx", width-225)
-        .attr("cy", height-60)
+        .attr("cx", width-275)
+        .attr("cy", height-470)
     //    .style("fill", "red");
         .style("fill", "#de2d26");
 
@@ -197,30 +173,30 @@ creating the text in the legend
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -200)
-        .attr("y", height-163)
+        .attr("x", width -250)
+        .attr("y", height-573)
         .style("text-anchor", "start")
         .text("Data not available");
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -200)
-        .attr("y", height-128)
+        .attr("x", width -250)
+        .attr("y", height-538)
         .style("text-anchor", "start")
         .text("Moderate (51-100)");
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -200)
-        .attr("y", height-93)
+        .attr("x", width -250)
+        .attr("y", height-503)
         .style("text-anchor", "start")
         .text("Unhealthy (101-200)");
     
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -200)
-        .attr("y", height-58)
+        .attr("x", width -250)
+        .attr("y", height-468)
         .style("text-anchor", "start")
         .text("Hazardous (200-300)");
         
@@ -231,22 +207,34 @@ labelling the legend
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -150)
-        .attr("y", height-15)
+        .attr("x", width -200)
+        .attr("y", height-425)
         .style("text-anchor", "middle")
         .style("fill", "purple") 
         .attr("font-size", "20px")
         .text("Safety Level in AQI");     
+
+        
+        
+        
+        
+   map("2001");
     
+    d3.select("#b2")
+        .on("click", function(d,i) {
+        console.log("b2");
+            map("2001");
+        })  
+    
+}
+
 
 
 
 //svg.selectAll(".county")
 //.data(counties.)
     
-});    
-    
-});
+
 
 
 
