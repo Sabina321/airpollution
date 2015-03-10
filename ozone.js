@@ -34,7 +34,7 @@ var projection = d3.geo.albers()
 // coloring the map
 // resource: Overstack: Question on Colorbrewer
 var color2 = d3.scale.quantize()
-    .domain([1,2,3,4,5])
+    .domain([0,6,10,20,30])
     .range(colorbrewer.Reds[5]);
 
 var path = d3.geo.path().projection(projection);
@@ -47,12 +47,23 @@ var county_ozone;
     importing the data for ozone levels
 --------------------------------------------------------------------------------------------*/
 function map(year){
-    var id = "ozone.json";
-    if(year=="2001"){
-       id = "ozone.json";  
+    var id = "California_2011_Ozone.json";
+    var start = "California_";
+    
+    var end = "_Ozone.json";
+    
+    var file = start.concat(year);
+    file = file.concat(end);
+    id = file; 
+    /*if(year=="2011"){
+       id = file; 
         console.log("if worked");
     }
-    
+    else if(year=="2012"){
+           id = "California_2012_Ozone.json";  
+        console.log("2012 clicked");          
+  
+    }*/
     d3.json(id, function(err, co){
     
     var ozone = [];     
@@ -218,14 +229,33 @@ labelling the legend
         
         
         
-   map("2001");
-    
+   map("2011");
+         d3.select("#b1")
+        .on("click", function(d,i) {
+        console.log("b1");
+            map("2010");
+        });
     d3.select("#b2")
         .on("click", function(d,i) {
         console.log("b2");
-            map("2001");
-        })  
+            map("2011");
+        });  
     
+     d3.select("#b3")
+        .on("click", function(d,i) {
+        console.log("b3");
+            map("2012");
+        });
+        d3.select("#b4")
+        .on("click", function(d,i) {
+        console.log("b4");
+            map("2013");
+        });
+         d3.select("#b5")
+        .on("click", function(d,i) {
+        console.log("b5");
+            map("2014");
+        });
 }
 
 
