@@ -15,6 +15,7 @@ var svg = d3.select("body").append("svg")
 
 //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
 var projection = d3.geo.albers()
+
 .translate([width/1.75, height / 2])
 .parallels([60, 50])
 .rotate([120, 0])
@@ -34,9 +35,8 @@ var projection = d3.geo.albers()
 // coloring the map
 // resource: Overstack: Question on Colorbrewer
 var color2 = d3.scale.quantize()
-    .domain([0,6,10,20,30])
-    .range(colorbrewer.Reds[5]);
-
+    .domain([0,75.75,151.5])
+    .range(colorbrewer.Reds[3]);
 var path = d3.geo.path().projection(projection);
 
 var county_ozone; 
@@ -73,31 +73,26 @@ function map(year){
     }
  
 
-    
 /*--------------------------------------------------------------------------------------------
     importing the data
 --------------------------------------------------------------------------------------------*/
 //Taken from http://bl.ocks.org/mbostock/5562380
     d3.json("ca-counties.json", function(err, ca) {
-
+    
     var counties = topojson.feature(ca, ca.objects.counties);
 
     
     console.log(counties.features[0].properties.name);
-
+  
    //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
     svg.selectAll(".county")
         .data(counties.features)
         .enter().append("path")
         .attr("class", "county-border")
         .attr("d", path)
-
-        .style("fill", function(d) { return color2 (getCountyOzone(d.properties.name)/10); })
-        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
       
-        
+        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
         .on("mouseover", function(d) {
-
         current_position = d3.mouse(this)
         //Update the tooltip position and value
         d3.select("#tooltip")
@@ -105,20 +100,20 @@ function map(year){
         .style("top", current_position[1] +"px")
         .html("AQI: " + Math.round(getCountyOzone(d.properties.name)))
         .select("#value");
-
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
-
         })
         .on("mouseout", function() {
-
         //Hide the tooltip
         d3.select("#tooltip").classed("hidden", true);
-
         })
+       .transition()
+        .delay(50)
+        .duration(500)
+        .style("fill", function(d) { return color2(getCountyOzone(d.properties.name)); })
         })   
     
-})
+         })
    };
         
        /*  var texts = svg.selectAll("text")
@@ -233,27 +228,79 @@ labelling the legend
          d3.select("#b1")
         .on("click", function(d,i) {
         console.log("b1");
-            map("2010");
+            map("2000");
         });
     d3.select("#b2")
         .on("click", function(d,i) {
         console.log("b2");
-            map("2011");
+            map("2001");
         });  
     
      d3.select("#b3")
         .on("click", function(d,i) {
         console.log("b3");
-            map("2012");
+            map("2002");
         });
         d3.select("#b4")
         .on("click", function(d,i) {
         console.log("b4");
-            map("2013");
+            map("2003");
         });
          d3.select("#b5")
         .on("click", function(d,i) {
         console.log("b5");
+            map("2004");
+        });
+     d3.select("#b6")
+        .on("click",  function(d,i) {
+        console.log("b6");
+            map("2005");
+        });
+    d3.select("#b7")
+        .on("click", function(d,i) {
+        console.log("b7");
+            map("2006");
+        });  
+    
+     d3.select("#b8")
+        .on("click", function(d,i) {
+        console.log("b8");
+            map("2007");
+        });
+        d3.select("#b9")
+        .on("click", function(d,i) {
+        console.log("b9");
+            map("2008");
+        });
+         d3.select("#b9")
+        .on("click", function(d,i) {
+        console.log("b9");
+            map("2009");
+        });
+     d3.select("#b10")
+        .on("click", function(d,i) {
+        console.log("b10");
+            map("2010");
+        });
+    d3.select("#b11")
+        .on("click", function(d,i) {
+        console.log("b11");
+            map("2011");
+        });  
+    
+     d3.select("#b12")
+        .on("click", function(d,i) {
+        console.log("b12");
+            map("2012");
+        });
+        d3.select("#b13")
+        .on("click", function(d,i) {
+        console.log("b13");
+            map("2013");
+        });
+         d3.select("#b14")
+        .on("click", function(d,i) {
+        console.log("b14");
             map("2014");
         });
 }
