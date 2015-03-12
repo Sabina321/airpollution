@@ -220,7 +220,24 @@ labelling the legend
         .attr("font-size", "20px")
         .text("Safety Level in AQI");     
 
-        
+          svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -300)
+        .attr("y", height-400)
+        .style("text-anchor", "start")
+        .style("fill", "purple") 
+        .attr("font-size", "16px")
+        .text("* AQI = Air Quality Index");
+    
+    
+     svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -300)
+        .attr("y", height-380)
+        .style("text-anchor", "start")
+        .style("fill", "purple") 
+        .attr("font-size", "16px")
+        .text("Measure of pollution");  
         
         
         
@@ -302,6 +319,12 @@ labelling the legend
         .on("click", function(d,i) {
         console.log("b14");
             map("2014");
+        });
+     //for State of the Air from American Lung Association
+    d3.select("#b16")
+        .on("click", function(d,i) {
+        console.log("b16");
+        map("2013a");
         });
 }
 

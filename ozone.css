@@ -3,7 +3,14 @@
 svg {
   font: 10px sans-serif;
 }
-
+#section {
+    width:350px;
+    float:left;
+    padding:10px; 
+}
+#button{
+ float:left;   
+}
 .caption {
   font-weight: bold;
 }
