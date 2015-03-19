@@ -15,7 +15,7 @@
   <body>
       
     
-    <h1 style = "text-align:center; color:steelblue"><bold> Ozone in the Air </bold></h1>
+    <h1 style = "text-align:center; color:steelblue"><bold> Asthma, Lung Cancer and Ozone in the Air </bold></h1>
 
     <!-- need to implement the function -->
    
@@ -29,7 +29,9 @@
      
       
       
-    <div id = "buttons" >   
+    <div id = "buttons" >
+        
+        <div class="float-right">   
         <p>AQI Standard</p>
         <button id = "b1">2000</button> 
         <button id = "b2">2001</button>
@@ -39,23 +41,28 @@
         <button id = "b6">2005</button>  
         <button id = "b7">2006</button>
         <button id = "b8">2007</button>
+
+	  <p></p>
         <button id = "b9">2008</button>
         <button id = "b10">2009</button>
-	  <p></p>
         <button id = "b11">2010</button> 
         <button id = "b12">2011</button>
         <button id = "b13">2012</button>
         <button id = "b14">2013</button>
         <button id = "b15">2014</button>
+        </div>
         
-        <p>American Lung Association - State of the Air</p>
+           <div  class="float-left">
+        <p>American Lung Association</p>
         <button id = "b16">Adult Asthma</button>
         <button id = "b17">Pediatric Asthma</button>
         <button id = "b18">Lung Cancer</button>
-    </div>
+        </div>
+        
+    
  <script type="text/javascript">init();</script> 
-      </div>
-    <p></p>  
+      
+   
 
     <!-- Your code for making the maps -->
 
@@ -64,19 +71,26 @@
 <!--<div id="tooltip" style="display:none;position:absolute;z-index:1001;background-color:#D8BFD8;"></div>-->
 
 <div id="tooltip" class="hidden"></div>
+      </div>
 
-    <p></p>
       
       
       
     <!-- Submission Info -->
+    <div>
+        <br><br><br><br><br><br><br><br>
+
+    
+      
+    <!-- Submission Info -->
+    
+      <h4>Members: Joanne Chan and Sabina Tomkins</h4>
     
       <p>CMPS 165 - Data Programming for Visualization</p>
       <p>Suresh K. Lodha</p>
       <p>Winter 2015</p>
       
 
-      <h2>Members: Sabina Tomkins and Joanne Chan </h2>
       
     <!-- Create a list using <ul> and <li> tag -->   
     <h4>Files</h4>
@@ -86,12 +100,11 @@
       <li>ozone.css</li>
       <li>ozone.js</li>
       <li>ozone.json</li>
-	<li>ca-counties.json</li>
+      <li>ca-counties.json</li>
     </ul>
       
     <h4> Data Sources:</h4>
         <ul>   
-            <li><a href="http://stackoverflow.com/questions/26817035/colorbrewer-scale-only-returning-lightest-values-on-d3-map">Overstack: Question on Colorbrewer</a></li>
             <li><a href = "http://www.airnow.gov/index.cfm?action=pubs.aqiguideozone">EPA Ozone Air Quality</a></li>
             <li><a href = "#">American Lung Association - State of the Air</a></li>
 
@@ -103,10 +116,10 @@
             <li>The County json files were taken from this <a href="http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/">site</a>.</li>
       
         </ul>
-      
-    <h4>"Good Artists Imitate, Great Artists Steal" - Steve Jobs </h4>
-      
-      
-      
+
+
+        
+ 
+      </div> 
   </body>
 </html>

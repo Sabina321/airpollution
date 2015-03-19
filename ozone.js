@@ -5,7 +5,7 @@
 //Taken from previous assignments
 var margin = {top: 20, right: 20, bottom: 20, left: 20};
   width = 1000 - margin.left - margin.right,
-  height = 700 - margin.top - margin.bottom;
+  height = 475 - margin.top - margin.bottom;
 
 var svg = d3.select("body").append("svg")
   .attr("width", width + margin.left + margin.right)
@@ -176,7 +176,7 @@ function health(adult){
         d3.select("#tooltip")
        .style("left", current_position[0] + "px")
         .style("top", current_position[1] +"px")
-        .html("% Cases of Lung Cancer " + Math.round(getCountyLC(d.properties.name)))
+        .html(d.properties.name + "<br><br>% Cases of Lung Cancer " + Math.round(getCountyLC(d.properties.name)))
         .select("#value");
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
@@ -251,7 +251,7 @@ function map(year){
         d3.select("#tooltip")
        .style("left", current_position[0] + "px")
         .style("top", current_position[1] +"px")
-        .html("AQI: " + Math.round(getCountyOzone(d.properties.name)))
+        .html(d.properties.name + "<br><br>AQI: " + Math.round(getCountyOzone(d.properties.name)) )
         .select("#value");
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
@@ -289,38 +289,38 @@ draw legend colored rectangles and the circles inside
     
     
     svg.append("rect")
-        .attr("x", width-160)
-        .attr("y", height-700)
+        .attr("x", width-120)
+        .attr("y", height-210)
         .attr("width", 160)
         .attr("height", 180)
-        .attr("fill", "lightgreen")
+        .attr("fill", "#D8BFD8")
         .style("stroke-size", "1px");
 
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-130)
-        .attr("cy", height-660)
+        .attr("cx", width-100)
+        .attr("cy", height-180)
        // .style("fill", "green");
         .style("fill", "#de2d26");
     
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-130)
-        .attr("cy", height-625)
+        .attr("cx", width-100)
+        .attr("cy", height-150)
      //   .style("fill", "yellow");
         .style("fill", "#fc9272");
     
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-130)
-        .attr("cy", height-590)
+        .attr("cx", width-100)
+        .attr("cy", height-120)
       //  .style("fill", "orange");
         .style("fill", "#fee0d2");
 
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-130)
-        .attr("cy", height-560)
+        .attr("cx", width-100)
+        .attr("cy", height-90)
     //    .style("fill", "red");
         .style("fill", "white");
 
@@ -332,30 +332,30 @@ creating the text in the legend
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -115)
-        .attr("y", height-660)
+        .attr("x", width -85)
+        .attr("y", height-180)
         .style("text-anchor", "start")
         .text("Hazardous (101+)");
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -115)
-        .attr("y", height-625)
+        .attr("x", width -85)
+        .attr("y", height-150)
         .style("text-anchor", "start")
         .text("Moderate (51-100)");
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -115)
-        .attr("y", height-590)
+        .attr("x", width -85)
+        .attr("y", height-120)
         .style("text-anchor", "start")
         .text("Healthy (1-50)");
     
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -115)
-        .attr("y", height-560)
+        .attr("x", width -85)
+        .attr("y", height-90)
         .style("text-anchor", "start")
         .text("Data not available");
         
@@ -366,8 +366,8 @@ labelling the legend
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -80)
-        .attr("y", height-530)
+        .attr("x", width -52)
+        .attr("y", height-40)
         .style("text-anchor", "middle")
         .style("fill", "purple") 
         .attr("font-size", "12px")
@@ -384,39 +384,46 @@ draw legend colored rectangles and the circles inside
     
     svg.append("rect")
         .attr("x", width-160)
-        .attr("y", height-500)
-        .attr("width", 160)
-        .attr("height", 180)
-        .attr("fill", "lightgreen")
+        .attr("y", height-450)
+        .attr("width", 180)
+        .attr("height", 200)
+        .attr("fill", "#D8BFD8")
         .style("stroke-size", "1px");
 
    svg.append("circle")
         .attr("r", 10)
         .attr("cx", width-130)
-        .attr("cy", height-460)
+        .attr("cy", height-435)
        // .style("fill", "green");
-        .style("fill", "#de2d26");
+        .style("fill", "#045a8d");
     
     svg.append("circle")
-        .attr("r", 10)
+        .attr("r", 9)
         .attr("cx", width-130)
-        .attr("cy", height-425)
+        .attr("cy", height-400)
      //   .style("fill", "yellow");
-        .style("fill", "#fc9272");
+        .style("fill", "#2b8cbe");
     
     svg.append("circle")
-        .attr("r", 10)
+        .attr("r", 9)
         .attr("cx", width-130)
-        .attr("cy", height-390)
+        .attr("cy", height-365)
       //  .style("fill", "orange");
-        .style("fill", "#fee0d2");
+        .style("fill", "#74a9cf");
 
     svg.append("circle")
-        .attr("r", 10)
+        .attr("r", 9)
         .attr("cx", width-130)
-        .attr("cy", height-360)
+        .attr("cy", height-335)
     //    .style("fill", "red");
-        .style("fill", "white");
+        .style("fill", "#bdc9e1");
+    
+    svg.append("circle")
+        .attr("r", 9)
+        .attr("cx", width-130)
+        .attr("cy", height-300)
+    //    .style("fill", "red");
+        .style("fill", "#f1eef6");
 
 
     
@@ -427,31 +434,38 @@ creating the text in the legend
     svg.append("text")
         .attr("class", "label")
         .attr("x", width -115)
-        .attr("y", height-460)
+        .attr("y", height-435)
         .style("text-anchor", "start")
-        .text("Hazardous (101+)");
+        .text(" > 9");
 
     svg.append("text")
         .attr("class", "label")
         .attr("x", width -115)
-        .attr("y", height-425)
+        .attr("y", height-400)
         .style("text-anchor", "start")
-        .text("Moderate (51-100)");
+        .text("7 - 9");
     
     svg.append("text")
         .attr("class", "label")
         .attr("x", width -115)
-        .attr("y", height-390)
+        .attr("y", height-365)
         .style("text-anchor", "start")
-        .text("Healthy (1-50)");
+        .text("5 - 7");
     
 
     svg.append("text")
         .attr("class", "label")
         .attr("x", width -115)
-        .attr("y", height-360)
+        .attr("y", height-335)
         .style("text-anchor", "start")
-        .text("Data not available");
+        .text("3 - 5");
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -115)
+        .attr("y", height-300)
+        .style("text-anchor", "start")
+        .text("1 - 3 ");
         
     
 /* ----------------------------------------------------------------------------
@@ -460,12 +474,13 @@ labelling the legend
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -80)
-        .attr("y", height-330)
+        .attr("x", width -75)
+        .attr("y", height-265)
         .style("text-anchor", "middle")
         .style("fill", "purple") 
-        .attr("font-size", "12px")
-        .text("% Reported Cases per Person");   
+        .attr("font-size", "10px")
+        .text("Reported Cases per 100 People");
+    
     
     
     

@@ -4,6 +4,20 @@ svg {
   font: 10px sans-serif;
 }
 
+.float-left
+{
+  float: left;
+}
+
+.float-right
+{
+  float: right;
+}
+.wrapper
+{
+  width: 500px;
+}
+
 #container {
 /*    display: inline-block;*/
     position: relative;
