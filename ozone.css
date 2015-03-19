@@ -3,7 +3,7 @@
 svg {
   font: 10px sans-serif;
 }
-
+/*http://stackoverflow.com/questions/3898329/creating-two-div-right-next-to-each-other-on-css*/
 .float-left
 {
   float: left;
