@@ -3,6 +3,26 @@
 svg {
   font: 10px sans-serif;
 }
+
+#container {
+/*    display: inline-block;*/
+    position: relative;
+    width: 100%;
+}
+    
+
+#container right {
+    position: absolute;
+    right: 0px;
+    max-width: 35%;
+}
+
+#container left {
+    position: absolute;
+    left: 0px;
+    max-width: 35%;
+}
+
 #section {
     width:350px;
     float:left;

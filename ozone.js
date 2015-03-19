@@ -16,10 +16,17 @@ var svg = d3.select("body").append("svg")
 //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
 var projection = d3.geo.albers()
 
-.translate([width/1.75, height / 2])
+.translate([width/1.75, height / 3])
 .parallels([60, 50])
 .rotate([120, 0])
-.scale(3500);
+.scale(2500);
+
+//Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
+var projection2 = d3.geo.albers()
+.translate([width/4, height/3])
+.parallels([60, 50])
+.rotate([120, 0])
+.scale(2500);
 
 
 //var p=d3.scale.category10();
@@ -37,19 +44,39 @@ var projection = d3.geo.albers()
 var color2 = d3.scale.quantize()
     .domain([0,75.75,151.5])
     .range(colorbrewer.Reds[3]);
+
+var color3 = d3.scale.quantize()
+    .domain([0,5,10])
+    .range(colorbrewer.Blues[3]);
+
+var color4 = d3.scale.quantize()
+    .domain([0,1000,11000])
+    .range(colorbrewer.Blues[3]);
+
 var path = d3.geo.path().projection(projection);
+var path2 = d3.geo.path().projection(projection2);
+
 
 var county_ozone; 
 
-function health(){
+function health(adult){
     d3.json("county_health_data.json", function(err, co){
-    
+ 
     var ozone = [];     
     console.log(co);  
-    function getCountyPopulation(d){
-        return (co[d]['Population']);    
+    function getCountyAdult(d){
+        return (co[d]['RelativeAdult']*100);    
     } 
-     d3.json("ca-counties.json", function(err, ca) {
+     function getCountyPed(d){
+        return (co[d]['PedAsthma']);    
+    }    
+    function getCountyLC(d){
+        return (co[d]['LungCancer']);    
+    }     
+        
+        
+    if(adult=="Adult"){    
+     d3.json("ca-counties.json",function(err, ca) {
     
     var counties = topojson.feature(ca, ca.objects.counties);
 
@@ -61,7 +88,7 @@ function health(){
         .data(counties.features)
         .enter().append("path")
         .attr("class", "county-border")
-        .attr("d", path)
+        .attr("d", path2)
       
         //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
         .on("mouseover", function(d) {
@@ -70,7 +97,7 @@ function health(){
         d3.select("#tooltip")
        .style("left", current_position[0] + "px")
         .style("top", current_position[1] +"px")
-        .html("AQI: " + Math.round(getCountyPopulation(d.properties.name)))
+        .html("%Adults with Asthma " + Math.round(getCountyAdult(d.properties.name)))
         .select("#value");
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
@@ -82,10 +109,84 @@ function health(){
        .transition()
         .delay(50)
         .duration(500)
-        .style("fill", function(d) { return color2(getCountyPopulation(d.properties.name)); })
+        .style("fill", function(d) { return color3(getCountyAdult(d.properties.name)); })
         })     
+    }
+    else if(adult=="child"){
+    d3.json("ca-counties.json",function(err, ca) {
+    
+    var counties = topojson.feature(ca, ca.objects.counties);
+
+    
+    console.log(counties.features[0].properties.name);
+  
+   //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
+    svg.selectAll(".county")
+        .data(counties.features)
+        .enter().append("path")
+        .attr("class", "county-border")
+        .attr("d", path2)
+      
+        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
+        .on("mouseover", function(d) {
+        current_position = d3.mouse(this)
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+       .style("left", current_position[0] + "px")
+        .style("top", current_position[1] +"px")
+        .html("Pedriatic Asthma Cases " + Math.round(getCountyPed(d.properties.name)))
+        .select("#value");
+        //Show the tooltip
+        d3.select("#tooltip").classed("hidden", false);
+        })
+        .on("mouseout", function() {
+        //Hide the tooltip
+        d3.select("#tooltip").classed("hidden", true);
+        })
+       .transition()
+        .delay(50)
+        .duration(500)
+        .style("fill", function(d) { return color4(getCountyPed(d.properties.name)); })
+        })    
         
-        
+    }
+        else{
+            d3.json("ca-counties.json",function(err, ca) {
+    
+    var counties = topojson.feature(ca, ca.objects.counties);
+
+    
+    console.log(counties.features[0].properties.name);
+  
+   //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
+    svg.selectAll(".county")
+        .data(counties.features)
+        .enter().append("path")
+        .attr("class", "county-border")
+        .attr("d", path2)
+      
+        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
+        .on("mouseover", function(d) {
+        current_position = d3.mouse(this)
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+       .style("left", current_position[0] + "px")
+        .style("top", current_position[1] +"px")
+        .html("Cases of Lung Cancer " + Math.round(getCountyLC(d.properties.name)))
+        .select("#value");
+        //Show the tooltip
+        d3.select("#tooltip").classed("hidden", false);
+        })
+        .on("mouseout", function() {
+        //Hide the tooltip
+        d3.select("#tooltip").classed("hidden", true);
+        })
+       .transition()
+        .delay(50)
+        .duration(500)
+        .style("fill", function(d) { return color4(getCountyLC(d.properties.name)); })
+        })
+        }
         
     });
 };
@@ -184,40 +285,40 @@ draw legend colored rectangles and the circles inside
     
     
     svg.append("rect")
-        .attr("x", width-300)
-        .attr("y", height-600)
-        .attr("width", 220)
+        .attr("x", width-160)
+        .attr("y", height-700)
+        .attr("width", 160)
         .attr("height", 180)
-        .attr("fill", "lightgrey")
+        .attr("fill", "lightgreen")
         .style("stroke-size", "1px");
 
     svg.append("circle")
-        .attr("r", 13)
-        .attr("cx", width-275)
-        .attr("cy", height-575)
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-660)
        // .style("fill", "green");
-        .style("fill", "white");
+        .style("fill", "#de2d26");
     
     svg.append("circle")
-        .attr("r", 13)
-        .attr("cx", width-275)
-        .attr("cy", height-540)
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-625)
      //   .style("fill", "yellow");
-        .style("fill", "#fee0d2");
+        .style("fill", "#fc9272");
     
     svg.append("circle")
-        .attr("r", 13)
-        .attr("cx", width-275)
-        .attr("cy", height-505)
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-590)
       //  .style("fill", "orange");
-        .style("fill", "#fc9272");
+        .style("fill", "#fee0d2");
 
     svg.append("circle")
-        .attr("r", 13)
-        .attr("cx", width-275)
-        .attr("cy", height-470)
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-560)
     //    .style("fill", "red");
-        .style("fill", "#de2d26");
+        .style("fill", "white");
 
 
     
@@ -230,7 +331,7 @@ creating the text in the legend
         .attr("x", width -250)
         .attr("y", height-573)
         .style("text-anchor", "start")
-        .text("Data not available");
+        .text("Hazardous (101+)");
 
     svg.append("text")
         .attr("class", "label")
@@ -244,7 +345,7 @@ creating the text in the legend
         .attr("x", width -250)
         .attr("y", height-503)
         .style("text-anchor", "start")
-        .text("Unhealthy (101-200)");
+        .text("Healthy (1-50)");
     
 
     svg.append("text")
@@ -252,7 +353,7 @@ creating the text in the legend
         .attr("x", width -250)
         .attr("y", height-468)
         .style("text-anchor", "start")
-        .text("Hazardous (200-300)");
+        .text("Data not available");
         
     
 /* ----------------------------------------------------------------------------
@@ -261,35 +362,112 @@ labelling the legend
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -200)
+        .attr("x", width -190)
         .attr("y", height-425)
         .style("text-anchor", "middle")
         .style("fill", "purple") 
         .attr("font-size", "20px")
-        .text("Safety Level in AQI");     
-
-          svg.append("text")
-        .attr("class", "label")
-        .attr("x", width -300)
-        .attr("y", height-400)
-        .style("text-anchor", "start")
-        .style("fill", "purple") 
-        .attr("font-size", "16px")
-        .text("* AQI = Air Quality Index");
+        .text("Ozone Air Quality Index");   
     
+    /***************************************************************************************************
+    Code for legend
+    Got the code from homework 3 and modify it
+****************************************************************************************************/
+/* ----------------------------------------------------------------------------
+draw legend colored rectangles and the circles inside
+-----------------------------------------------------------------------------*/ 
+    
+    
+    svg.append("rect")
+        .attr("x", width-160)
+        .attr("y", height-500)
+        .attr("width", 160)
+        .attr("height", 180)
+        .attr("fill", "lightgreen")
+        .style("stroke-size", "1px");
+
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-575)
+       // .style("fill", "green");
+        .style("fill", "#de2d26");
+    
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-540)
+     //   .style("fill", "yellow");
+        .style("fill", "#fc9272");
+    
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-505)
+      //  .style("fill", "orange");
+        .style("fill", "#fee0d2");
+
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-470)
+    //    .style("fill", "red");
+        .style("fill", "white");
+
+
+    
+/* ----------------------------------------------------------------------------
+creating the text in the legend
+-----------------------------------------------------------------------------*/ 
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-573)
+        .style("text-anchor", "start")
+        .text("Hazardous (101+)");
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-538)
+        .style("text-anchor", "start")
+        .text("Moderate (51-100)");
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-503)
+        .style("text-anchor", "start")
+        .text("Healthy (1-50)");
+    
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-468)
+        .style("text-anchor", "start")
+        .text("Data not available");
+        
+    
+/* ----------------------------------------------------------------------------
+labelling the legend
+-----------------------------------------------------------------------------*/  
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -300)
-        .attr("y", height-380)
-        .style("text-anchor", "start")
+        .attr("x", width -190)
+        .attr("y", height-425)
+        .style("text-anchor", "middle")
         .style("fill", "purple") 
-        .attr("font-size", "16px")
-        .text("Measure of pollution");  
-        
-        
+        .attr("font-size", "20px")
+        .text("Ozone Air Quality Index");  
+    
+    
+    
      
    map("2011");
+    health("lungs");
          d3.select("#b1")
         .on("click", function(d,i) {
         console.log("b1");
@@ -372,7 +550,306 @@ labelling the legend
     d3.select("#b16")
         .on("click", function(d,i) {
         console.log("b16");
-        health();
+        health("Adult");
+        });
+     d3.select("#b17")
+        .on("click", function(d,i) {
+        console.log("b16");
+        health("child");
+        });
+     d3.select("#b18")
+        .on("click", function(d,i) {
+        console.log("b16");
+        health("lung");
+        });
+}
+
+function init2(){
+   /***************************************************************************************************
+    Code for legend
+    Got the code from homework 3 and modify it
+****************************************************************************************************/
+/* ----------------------------------------------------------------------------
+draw legend colored rectangles and the circles inside
+-----------------------------------------------------------------------------*/ 
+    
+    
+    svg.append("rect")
+        .attr("x", width-160)
+        .attr("y", height-700)
+        .attr("width", 160)
+        .attr("height", 180)
+        .attr("fill", "lightgreen")
+        .style("stroke-size", "1px");
+
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-660)
+       // .style("fill", "green");
+        .style("fill", "#de2d26");
+    
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-625)
+     //   .style("fill", "yellow");
+        .style("fill", "#fc9272");
+    
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-590)
+      //  .style("fill", "orange");
+        .style("fill", "#fee0d2");
+
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-130)
+        .attr("cy", height-560)
+    //    .style("fill", "red");
+        .style("fill", "white");
+
+
+    
+/* ----------------------------------------------------------------------------
+creating the text in the legend
+-----------------------------------------------------------------------------*/ 
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-573)
+        .style("text-anchor", "start")
+        .text("Hazardous (101+)");
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-538)
+        .style("text-anchor", "start")
+        .text("Moderate (51-100)");
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-503)
+        .style("text-anchor", "start")
+        .text("Healthy (1-50)");
+    
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-468)
+        .style("text-anchor", "start")
+        .text("Data not available");
+        
+    
+/* ----------------------------------------------------------------------------
+labelling the legend
+-----------------------------------------------------------------------------*/  
+    
+     svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -190)
+        .attr("y", height-425)
+        .style("text-anchor", "middle")
+        .style("fill", "purple") 
+        .attr("font-size", "20px")
+        .text("Ozone Air Quality Index");   
+    
+    /***************************************************************************************************
+    Code for legend
+    Got the code from homework 3 and modify it
+****************************************************************************************************/
+/* ----------------------------------------------------------------------------
+draw legend colored rectangles and the circles inside
+-----------------------------------------------------------------------------*/ 
+    
+    
+    svg.append("rect")
+        .attr("x", width-160)
+        .attr("y", height-500)
+        .attr("width", 160)
+        .attr("height", 180)
+        .attr("fill", "lightgreen")
+        .style("stroke-size", "1px");
+
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-575)
+       // .style("fill", "green");
+        .style("fill", "#de2d26");
+    
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-540)
+     //   .style("fill", "yellow");
+        .style("fill", "#fc9272");
+    
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-505)
+      //  .style("fill", "orange");
+        .style("fill", "#fee0d2");
+
+    svg.append("circle")
+        .attr("r", 10)
+        .attr("cx", width-275)
+        .attr("cy", height-470)
+    //    .style("fill", "red");
+        .style("fill", "white");
+
+
+    
+/* ----------------------------------------------------------------------------
+creating the text in the legend
+-----------------------------------------------------------------------------*/ 
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-573)
+        .style("text-anchor", "start")
+        .text("Hazardous (101+)");
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-538)
+        .style("text-anchor", "start")
+        .text("Moderate (51-100)");
+    
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-503)
+        .style("text-anchor", "start")
+        .text("Healthy (1-50)");
+    
+
+    svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -250)
+        .attr("y", height-468)
+        .style("text-anchor", "start")
+        .text("Data not available");
+        
+    
+/* ----------------------------------------------------------------------------
+labelling the legend
+-----------------------------------------------------------------------------*/  
+    
+     svg.append("text")
+        .attr("class", "label")
+        .attr("x", width -190)
+        .attr("y", height-425)
+        .style("text-anchor", "middle")
+        .style("fill", "purple") 
+        .attr("font-size", "20px")
+        .text("Ozone Air Quality Index");  
+    
+    
+    
+     
+   health("2011");
+         d3.select("#b1")
+        .on("click", function(d,i) {
+        console.log("b1");
+            map("2000");
+        });
+    d3.select("#b2")
+        .on("click", function(d,i) {
+        console.log("b2");
+            map("2001");
+        });  
+    
+     d3.select("#b3")
+        .on("click", function(d,i) {
+        console.log("b3");
+            map("2002");
+        });
+        d3.select("#b4")
+        .on("click", function(d,i) {
+        console.log("b4");
+            map("2003");
+        });
+         d3.select("#b5")
+        .on("click", function(d,i) {
+        console.log("b5");
+            map("2004");
+        });
+     d3.select("#b6")
+        .on("click",  function(d,i) {
+        console.log("b6");
+            map("2005");
+        });
+    d3.select("#b7")
+        .on("click", function(d,i) {
+        console.log("b7");
+            map("2006");
+        });  
+    
+     d3.select("#b8")
+        .on("click", function(d,i) {
+        console.log("b8");
+            map("2007");
+        });
+        d3.select("#b9")
+        .on("click", function(d,i) {
+        console.log("b9");
+            map("2008");
+        });
+         d3.select("#b9")
+        .on("click", function(d,i) {
+        console.log("b9");
+            map("2009");
+        });
+     d3.select("#b10")
+        .on("click", function(d,i) {
+        console.log("b10");
+            map("2010");
+        });
+    d3.select("#b11")
+        .on("click", function(d,i) {
+        console.log("b11");
+            map("2011");
+        });  
+    
+     d3.select("#b12")
+        .on("click", function(d,i) {
+        console.log("b12");
+            map("2012");
+        });
+        d3.select("#b13")
+        .on("click", function(d,i) {
+        console.log("b13");
+            map("2013");
+        });
+         d3.select("#b14")
+        .on("click", function(d,i) {
+        console.log("b14");
+            map("2014");
+        });
+     //for State of the Air from American Lung Association
+    d3.select("#b16")
+        .on("click", function(d,i) {
+        console.log("b16");
+        health("Adult");
+        });
+     d3.select("#b17")
+        .on("click", function(d,i) {
+        console.log("b16");
+        health("child");
+        });
+     d3.select("#b18")
+        .on("click", function(d,i) {
+        console.log("b16");
+        health("lung");
         });
 }
 
