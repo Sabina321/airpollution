@@ -176,7 +176,7 @@ function health(adult){
         d3.select("#tooltip")
        .style("left", current_position[0] + "px")
         .style("top", current_position[1] +"px")
-        .html(d.properties.name + "<br><br>% Cases of Lung Cancer " + Math.round(getCountyLC(d.properties.name)))
+        .html(d.properties.name + "<br><br>% Cases of COPD " + Math.round(getCountyLC(d.properties.name)))
         .select("#value");
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
