@@ -41,7 +41,55 @@ var path = d3.geo.path().projection(projection);
 
 var county_ozone; 
 
+function health(){
+    d3.json("county_health_data.json", function(err, co){
+    
+    var ozone = [];     
+    console.log(co);  
+    function getCountyPopulation(d){
+        return (co[d]['Population']);    
+    } 
+     d3.json("ca-counties.json", function(err, ca) {
+    
+    var counties = topojson.feature(ca, ca.objects.counties);
 
+    
+    console.log(counties.features[0].properties.name);
+  
+   //Taken from: http://shancarter.github.io/ucb-dataviz-fall-2013/classes/interactive-maps/
+    svg.selectAll(".county")
+        .data(counties.features)
+        .enter().append("path")
+        .attr("class", "county-border")
+        .attr("d", path)
+      
+        //http://jsfiddle.net/sam0kqvx/24/ and  http://chimera.labs.oreilly.com/books/1230000000345/ch10.html#_html_div_tooltips
+        .on("mouseover", function(d) {
+        current_position = d3.mouse(this)
+        //Update the tooltip position and value
+        d3.select("#tooltip")
+       .style("left", current_position[0] + "px")
+        .style("top", current_position[1] +"px")
+        .html("AQI: " + Math.round(getCountyPopulation(d.properties.name)))
+        .select("#value");
+        //Show the tooltip
+        d3.select("#tooltip").classed("hidden", false);
+        })
+        .on("mouseout", function() {
+        //Hide the tooltip
+        d3.select("#tooltip").classed("hidden", true);
+        })
+       .transition()
+        .delay(50)
+        .duration(500)
+        .style("fill", function(d) { return color2(getCountyPopulation(d.properties.name)); })
+        })     
+        
+        
+        
+    });
+};
+    
 
 /*--------------------------------------------------------------------------------------------
     importing the data for ozone levels
@@ -240,7 +288,7 @@ labelling the legend
         .text("Measure of pollution");  
         
         
-        
+     
    map("2011");
          d3.select("#b1")
         .on("click", function(d,i) {
@@ -324,7 +372,7 @@ labelling the legend
     d3.select("#b16")
         .on("click", function(d,i) {
         console.log("b16");
-        map("2013a");
+        health();
         });
 }
 
