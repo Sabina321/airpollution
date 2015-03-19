@@ -45,13 +45,17 @@ var color2 = d3.scale.quantize()
     .domain([0,75.75,151.5])
     .range(colorbrewer.Reds[3]);
 
-var color3 = d3.scale.quantize()
-    .domain([0,5,10])
-    .range(colorbrewer.Blues[3]);
+var lung_cancer_colors = d3.scale.quantize()
+    .domain([1,3,5,7,9])
+    .range(colorbrewer.Blues[5]);
 
-var color4 = d3.scale.quantize()
-    .domain([0,1000,11000])
-    .range(colorbrewer.Blues[3]);
+var ped_asthma_colors = d3.scale.quantize()
+    .domain([1,3,5,7,9])
+    .range(colorbrewer.Blues[5]);
+
+var adult_asthma_colors = d3.scale.quantize()
+    .domain([1,3,5,7,9])
+    .range(colorbrewer.Blues[5]);
 
 var path = d3.geo.path().projection(projection);
 var path2 = d3.geo.path().projection(projection2);
@@ -68,10 +72,10 @@ function health(adult){
         return (co[d]['RelativeAdult']*100);    
     } 
      function getCountyPed(d){
-        return (co[d]['PedAsthma']);    
+        return (co[d]['RelativePed']*100);    
     }    
     function getCountyLC(d){
-        return (co[d]['LungCancer']);    
+        return ((co[d]['LungCancer']/co[d]["Population"])*100);    
     }     
         
         
@@ -109,7 +113,7 @@ function health(adult){
        .transition()
         .delay(50)
         .duration(500)
-        .style("fill", function(d) { return color3(getCountyAdult(d.properties.name)); })
+        .style("fill", function(d) { return adult_asthma_colors(getCountyAdult(d.properties.name)); })
         })     
     }
     else if(adult=="child"){
@@ -134,7 +138,7 @@ function health(adult){
         d3.select("#tooltip")
        .style("left", current_position[0] + "px")
         .style("top", current_position[1] +"px")
-        .html("Pedriatic Asthma Cases " + Math.round(getCountyPed(d.properties.name)))
+        .html("%Pedriatic Asthma Cases " + Math.round(getCountyPed(d.properties.name)))
         .select("#value");
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
@@ -146,7 +150,7 @@ function health(adult){
        .transition()
         .delay(50)
         .duration(500)
-        .style("fill", function(d) { return color4(getCountyPed(d.properties.name)); })
+        .style("fill", function(d) { return ped_asthma_colors(getCountyPed(d.properties.name)); })
         })    
         
     }
@@ -172,7 +176,7 @@ function health(adult){
         d3.select("#tooltip")
        .style("left", current_position[0] + "px")
         .style("top", current_position[1] +"px")
-        .html("Cases of Lung Cancer " + Math.round(getCountyLC(d.properties.name)))
+        .html("% Cases of Lung Cancer " + Math.round(getCountyLC(d.properties.name)))
         .select("#value");
         //Show the tooltip
         d3.select("#tooltip").classed("hidden", false);
@@ -184,7 +188,7 @@ function health(adult){
        .transition()
         .delay(50)
         .duration(500)
-        .style("fill", function(d) { return color4(getCountyLC(d.properties.name)); })
+        .style("fill", function(d) { return lung_cancer_colors(getCountyLC(d.properties.name)); })
         })
         }
         
@@ -328,30 +332,30 @@ creating the text in the legend
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-573)
+        .attr("x", width -115)
+        .attr("y", height-660)
         .style("text-anchor", "start")
         .text("Hazardous (101+)");
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-538)
+        .attr("x", width -115)
+        .attr("y", height-625)
         .style("text-anchor", "start")
         .text("Moderate (51-100)");
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-503)
+        .attr("x", width -115)
+        .attr("y", height-590)
         .style("text-anchor", "start")
         .text("Healthy (1-50)");
     
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-468)
+        .attr("x", width -115)
+        .attr("y", height-560)
         .style("text-anchor", "start")
         .text("Data not available");
         
@@ -362,11 +366,11 @@ labelling the legend
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -190)
-        .attr("y", height-425)
+        .attr("x", width -80)
+        .attr("y", height-530)
         .style("text-anchor", "middle")
         .style("fill", "purple") 
-        .attr("font-size", "20px")
+        .attr("font-size", "12px")
         .text("Ozone Air Quality Index");   
     
     /***************************************************************************************************
@@ -386,31 +390,31 @@ draw legend colored rectangles and the circles inside
         .attr("fill", "lightgreen")
         .style("stroke-size", "1px");
 
-    svg.append("circle")
+   svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-275)
-        .attr("cy", height-575)
+        .attr("cx", width-130)
+        .attr("cy", height-460)
        // .style("fill", "green");
         .style("fill", "#de2d26");
     
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-275)
-        .attr("cy", height-540)
+        .attr("cx", width-130)
+        .attr("cy", height-425)
      //   .style("fill", "yellow");
         .style("fill", "#fc9272");
     
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-275)
-        .attr("cy", height-505)
+        .attr("cx", width-130)
+        .attr("cy", height-390)
       //  .style("fill", "orange");
         .style("fill", "#fee0d2");
 
     svg.append("circle")
         .attr("r", 10)
-        .attr("cx", width-275)
-        .attr("cy", height-470)
+        .attr("cx", width-130)
+        .attr("cy", height-360)
     //    .style("fill", "red");
         .style("fill", "white");
 
@@ -422,30 +426,30 @@ creating the text in the legend
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-573)
+        .attr("x", width -115)
+        .attr("y", height-460)
         .style("text-anchor", "start")
         .text("Hazardous (101+)");
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-538)
+        .attr("x", width -115)
+        .attr("y", height-425)
         .style("text-anchor", "start")
         .text("Moderate (51-100)");
     
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-503)
+        .attr("x", width -115)
+        .attr("y", height-390)
         .style("text-anchor", "start")
         .text("Healthy (1-50)");
     
 
     svg.append("text")
         .attr("class", "label")
-        .attr("x", width -250)
-        .attr("y", height-468)
+        .attr("x", width -115)
+        .attr("y", height-360)
         .style("text-anchor", "start")
         .text("Data not available");
         
@@ -456,12 +460,12 @@ labelling the legend
     
      svg.append("text")
         .attr("class", "label")
-        .attr("x", width -190)
-        .attr("y", height-425)
+        .attr("x", width -80)
+        .attr("y", height-330)
         .style("text-anchor", "middle")
         .style("fill", "purple") 
-        .attr("font-size", "20px")
-        .text("Ozone Air Quality Index");  
+        .attr("font-size", "12px")
+        .text("% Reported Cases per Person");   
     
     
     
